@@ -605,7 +605,7 @@
         <a href="logo2.jpeg" class="logo">CandyWear</a>
         
         <nav class="nav-menu">
-          <a href="#" class="nav-link">Home</a>
+          <a href="#index" class="nav-link">Home</a>
           <a href="#shop" class="nav-link">Shop</a>
           <a href="#about" class="nav-link">About</a>
           <a href="#contact" class="nav-link">Contact</a>
@@ -938,17 +938,35 @@
     }
     
     // Checkout
-    checkoutBtn.addEventListener('click', () => {
-      if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-      }
-      
-      alert('Thank you for your purchase! This is a demo store, so no real transaction occurred.');
-      cart = [];
-      updateCart();
-      closeCartModal();
-    });
+    // Checkout - Redirect to WhatsApp
+checkoutBtn.addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+
+  // Create a summary message for WhatsApp
+  let message = "🛍️ *New CandyWear Order*%0A%0A";
+  cart.forEach(item => {
+    message += `• ${item.name} (x${item.quantity}) - R${(item.price * item.quantity).toFixed(2)}%0A`;
+  });
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  message += `%0ATotal: *R${total.toFixed(2)}*%0A%0APlease confirm my order.`;
+
+  // Your WhatsApp number (with country code, no + or spaces)
+  const phoneNumber = "27612726273"; // Example: South Africa = 27 + phone number
+
+  // Redirect to WhatsApp chat
+  const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+  window.open(whatsappURL, "_blank");
+
+  // Clear cart after redirect
+  cart = [];
+  updateCart();
+  closeCartModal();
+});
+
     
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -976,3 +994,6 @@
   </script>
 </body>
 </html>
+    
+
+
